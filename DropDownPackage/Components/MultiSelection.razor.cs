@@ -28,6 +28,7 @@ namespace DropDownPackage.Components
 		private List<T> ItemList = new List<T>();
 		private List<T> FilteredItemList = new List<T>();
 		private List<object> SelectedValues = new List<object>();
+		private bool isDropdownOpen = false;
 
 		#endregion
 
@@ -93,50 +94,57 @@ namespace DropDownPackage.Components
 		// Check if the item is selected based on the current selection
 		private bool IsSelected(T item)
 		{
+			bool isSelected = false;
 			var identifierValue = GetPropertyValue(item, IdentifierProperty);
-			return SelectedValues.Contains(identifierValue);
-		}
 
-		private string GetOptionClass(T item)
-		{
-			return IsSelected(item) ? "selected-option" : string.Empty;
+			if (SelectedValues != null && SelectedValues.Any())
+			{
+				isSelected = SelectedValues.Any(selectedItem =>
+				{
+					var selectedIdentifierValue = GetPropertyValue((T)selectedItem, IdentifierProperty);
+					return selectedIdentifierValue.Equals(identifierValue);
+				});
+			}
+
+			return isSelected;
 		}
 
 		// This method will handle changes in selection
-		private async Task OnValueChanged(ChangeEventArgs e)
+		private async Task OnValueChanged(T item)
 		{
-			var selectedOptions = (e.Value as string[]) ?? Array.Empty<string>();
-
-			if (SelectedValues.Count == 0)
+			try
 			{
-				SelectedValues = selectedOptions
-								.Select(value => ItemList.FirstOrDefault(item => GetPropertyValue(item, IdentifierProperty).ToString() == value))
-								.Where(item => item != null)
-								.Cast<object>()
-								.ToList();
-			}
-			else
-			{
-				var newSelectedValues = selectedOptions
-										.Select(value => ItemList.FirstOrDefault(item => GetPropertyValue(item, IdentifierProperty).ToString() == value))
-										.Where(item => item != null)
-										.Cast<object>()
-										.ToList();
-
-				if (newSelectedValues.FirstOrDefault() != null && SelectedValues.Contains(newSelectedValues.FirstOrDefault()))
+				if (IsSelected(item))
 				{
-					SelectedValues.Remove(newSelectedValues.FirstOrDefault());
+					// If the item is already selected, remove it
+					SelectedValues.Remove(item);
 				}
 				else
 				{
-					SelectedValues.AddRange(newSelectedValues);
+					// If the item is not selected, add it
+					SelectedValues.Add(item);
 				}
-			}
 
-			if (ValuesChanged.HasDelegate)
-			{
-				await ValuesChanged.InvokeAsync(SelectedValues.Cast<T>().ToList());
+				// Trigger the ValuesChanged callback
+				if (ValuesChanged.HasDelegate)
+				{
+					await ValuesChanged.InvokeAsync(SelectedValues.Cast<T>().ToList());
+				}
+
+				// Re-render the component
+				await InvokeAsync(StateHasChanged);
 			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+		}
+
+		// Toggle the dropdown visibility
+		private void ToggleDropdown()
+		{
+			isDropdownOpen = !isDropdownOpen;
+			StateHasChanged(); // Force re-render
 		}
 	}
 }

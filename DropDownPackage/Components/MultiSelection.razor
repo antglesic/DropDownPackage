@@ -1,7 +1,7 @@
 ﻿@using DropDownPackage.Components
 @typeparam T
 
-<div class="dropdown-container">
+<div class="dropdown-container @(isDropdownOpen ? "open" : "")" @onclick="ToggleDropdown">
 	@if (CanSearch)
 	{
 		<!-- Search Box -->
@@ -9,20 +9,29 @@
 	}
 
 	<!-- Dropdown with Multiple Selections -->
-	<select @onchange="OnValueChanged" multiple size="5" class="dropdown-select">
+	<div class="dropdown-list">
 		@if (FilteredItemList != null && FilteredItemList.Any())
 		{
 			@foreach (var item in FilteredItemList)
 			{
-				<option value="@GetPropertyValue(item, IdentifierProperty)"
-						@selected="@IsSelected(item)" class="@GetOptionClass(item)">
-					@GetPropertyValue(item, DisplayProperty)
-				</option>
+				<div class="dropdown-item">
+					<input type="checkbox"
+						   id="@GetPropertyValue(item, IdentifierProperty)"
+						   value="@GetPropertyValue(item, IdentifierProperty)"
+						   checked="@IsSelected(item)"
+						   @onchange="() => OnValueChanged(item)"
+						   class="dropdown-checkbox" />
+					<label for="@GetPropertyValue(item, IdentifierProperty)" class="dropdown-label">
+						@GetPropertyValue(item, DisplayProperty)
+					</label>
+				</div>
 			}
 		}
 		else
 		{
-			<option disabled>No items available</option>
+			<div class="dropdown-item disabled">
+				No items available
+			</div>
 		}
-	</select>
+	</div>
 </div>

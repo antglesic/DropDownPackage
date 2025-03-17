@@ -30,10 +30,17 @@ namespace DropDownPackage.Components.Pages
 
 		public void OnSelectedItemsChanged(List<DummyDataDto> items)
 		{
-			Console.WriteLine("Selected items:");
-			foreach (var item in items)
+			try
 			{
-				Console.WriteLine(item.FullName);
+				Console.WriteLine("Selected items:");
+				foreach (var item in items)
+				{
+					Console.WriteLine(item.FullName);
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
 			}
 		}
 	}
