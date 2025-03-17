@@ -1,0 +1,65 @@
+﻿/* Container that wraps the search box and the dropdown */
+.dropdown-container {
+	position: relative;
+	width: 250px; /* Adjust as needed */
+	font-family: Arial, sans-serif;
+}
+
+	/* Style for the search input */
+	.dropdown-container input[type="text"] {
+		width: 100%;
+		padding: 8px 12px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		margin-bottom: 8px;
+		font-size: 14px;
+		transition: border-color 0.2s ease;
+	}
+
+		.dropdown-container input[type="text"]:focus {
+			border-color: #007bff;
+			outline: none;
+		}
+
+	/* Style for the select dropdown */
+	.dropdown-container select {
+		width: 100%;
+		padding: 8px 12px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		font-size: 14px;
+		background-color: #fff;
+		appearance: none; /* Remove default dropdown icon in some browsers */
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		cursor: pointer;
+		box-sizing: border-box;
+	}
+
+		/* Style the dropdown when hovered */
+		.dropdown-container select:hover {
+			border-color: #007bff;
+		}
+
+	/* Style the options in the dropdown */
+	.dropdown-container option {
+		padding: 8px;
+		font-size: 14px;
+	}
+
+		/* Style the disabled "No items available" option */
+		.dropdown-container option:disabled {
+			color: #999;
+		}
+
+	/* For better accessibility and usability, ensure the dropdown list is shown on focus */
+	.dropdown-container select:focus {
+		outline: none;
+		border-color: #007bff;
+	}
+
+	/* Optional: Apply a shadow when the dropdown is open for a better effect */
+	.dropdown-container select:focus,
+	.dropdown-container input[type="text"]:focus {
+		box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+	}

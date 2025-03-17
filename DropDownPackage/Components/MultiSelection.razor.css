@@ -1,0 +1,62 @@
+﻿/* Styling for the container */
+.dropdown-container {
+	position: relative;
+	width: 250px;
+	font-family: Arial, sans-serif;
+}
+
+.dropdown-search {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 8px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	font-size: 14px;
+}
+
+.dropdown-select {
+	width: 100%;
+	padding: 8px;
+	font-size: 14px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	color: #333;
+	outline: none;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+}
+
+	.dropdown-select:focus {
+		border-color: #5b9bd5;
+	}
+
+	/* Highlight selected options */
+	.dropdown-select option {
+		padding: 8px;
+		transition: background-color 0.3s ease;
+	}
+
+		.dropdown-select option:hover {
+			background-color: #f0f0f0;
+		}
+
+		.dropdown-select option:checked {
+			background-color: #007bff;
+			color: white;
+		}
+
+			/* Style the selected option */
+			.dropdown-select option:checked:hover {
+				background-color: #0056b3;
+			}
+
+/* Optional: Add some custom classes for selected options to indicate their status */
+.selected-option {
+	background-color: #007bff !important;
+	color: white;
+}
+
+	.selected-option:hover {
+		background-color: #0056b3 !important;
+	}

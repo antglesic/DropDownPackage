@@ -1,0 +1,25 @@
+﻿@using DropDownPackage.Components
+@typeparam T
+
+<div class="dropdown-container">
+	@if (CanSearch)
+	{
+		<!-- Search Box -->
+		<input type="text" placeholder="Search..." @oninput="FilterItems" />
+	}
+
+	<!-- Dropdown -->
+	<select @onchange="OnValueChanged">
+		@if (FilteredItemList != null && FilteredItemList.Any())
+		{
+			@foreach (var item in FilteredItemList)
+			{
+				<option value="@GetPropertyValue(item, IdentifierProperty)">@GetPropertyValue(item, DisplayProperty)</option>
+			}
+		}
+		else
+		{
+			<option disabled>No items available</option>
+		}
+	</select>
+</div>

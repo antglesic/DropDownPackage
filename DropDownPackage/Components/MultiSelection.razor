@@ -1,0 +1,28 @@
+﻿@using DropDownPackage.Components
+@typeparam T
+
+<div class="dropdown-container">
+	@if (CanSearch)
+	{
+		<!-- Search Box -->
+		<input type="text" placeholder="Search..." @oninput="FilterItems" class="dropdown-search" />
+	}
+
+	<!-- Dropdown with Multiple Selections -->
+	<select @onchange="OnValueChanged" multiple size="5" class="dropdown-select">
+		@if (FilteredItemList != null && FilteredItemList.Any())
+		{
+			@foreach (var item in FilteredItemList)
+			{
+				<option value="@GetPropertyValue(item, IdentifierProperty)"
+						@selected="@IsSelected(item)" class="@GetOptionClass(item)">
+					@GetPropertyValue(item, DisplayProperty)
+				</option>
+			}
+		}
+		else
+		{
+			<option disabled>No items available</option>
+		}
+	</select>
+</div>
