@@ -68,3 +68,15 @@ public void OnSelectedItemChanged(DummyDataDto item)
 }
 ```
 ## Screenshots
+
+### Dropdown closed
+![Dropdown_closed](https://github.com/user-attachments/assets/6d3da661-cbc4-4f2d-b075-e9b52314ed9d)
+
+### Dropdown open
+![Dropdown_open](https://github.com/user-attachments/assets/2b8e7a00-8919-4ca9-9a39-76f7ab631396)
+
+### Dropdown filtered
+![Dropdown_filtered](https://github.com/user-attachments/assets/816e2127-8cbd-4488-bea5-caf345ce6c7f)
+
+### Dropdown selected item
+![Dropdown_selected_item](https://github.com/user-attachments/assets/c26728a1-96d1-4a0e-b4bf-a29c4da60941)
