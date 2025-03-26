@@ -10,8 +10,6 @@
 		<AssemblyName>DropDownPackage</AssemblyName>
 		<RootNamespace>DropDownPackage</RootNamespace>
 		<PackageId>DropDownPackage</PackageId>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<Version>1.0.0</Version>
 		<Authors>Antonio Glešić</Authors>
 		<Company></Company>
