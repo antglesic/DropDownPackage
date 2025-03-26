@@ -16,7 +16,7 @@
 		<Authors>Antonio Glešić</Authors>
 		<Company></Company>
 		<Description>My blazor dropdown component</Description>
-		<RepositoryUrl>https://github.com/antglesic/GrabaDropDowns</RepositoryUrl>
+		<RepositoryUrl>https://github.com/antglesic/DropDownPackage</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor, dropdown, component</PackageTags>
 		<OutputType>Library</OutputType>
