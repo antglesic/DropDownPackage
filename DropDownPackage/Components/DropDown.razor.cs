@@ -21,59 +21,47 @@ namespace DropDownPackage.Components
 		[Parameter]
 		public bool CanSearch { get; set; } = false;
 
+		[Parameter]
+		public string SearchPlaceHolder { get; set; } = "Search...";
+
+		[Parameter]
+		public string Height { get; set; } = string.Empty;
+
+		[Parameter]
+		public string Width { get; set; } = "200px";
+
+		[Parameter]
+		public string CustomStyle { get; set; } = string.Empty;
+
 		#endregion
 
 		#region Properties
 
 		private List<T> ItemList = new List<T>();
 		private List<T> FilteredItemList = new List<T>();
+		private bool isDropdownOpen = false;
+		private T? SelectedItem { get; set; }
 
 		#endregion
 
 		#region Methods
 
-		protected override async Task OnInitializedAsync()
-		{
-			if (Items != null && Items.Any() && (ItemList == null || ItemList.Count == 0))
-			{
-				ItemList = Items.ToList();
-				FilteredItemList = ItemList;
-			}
-
-			await base.OnInitializedAsync();
-		}
-
 		protected override async Task OnParametersSetAsync()
 		{
-			/*
-				If you got some data sent to the dropdown and the dropdown is empty, then fill it with the data.
-			*/
 			if (Items != null && Items.Any())
 			{
-				/*
-					If the dropdown is empty, then fill it with the data.
-				*/
-				if (ItemList == null || ItemList.Count == 0)
+				// Check if ItemList is empty or if the items have changed
+				if (ItemList.Count == 0 || !ItemsAreEqual(ItemList, Items))
 				{
-					ItemList = Items.ToList();
-					FilteredItemList = ItemList;
-				}
-				/*
-					If the dropdown is not empty, then check if the data is different from the current data.
-				*/
-				else if (ItemList.Count != Items.Count() || !ItemsAreEqual(ItemList, Items))
-				{
-					ItemList = Items.ToList();
-					FilteredItemList = ItemList;
+					ItemList = Items.ToList();      // Initialize ItemList with the provided items
+					FilteredItemList = ItemList;    // Initialize the filtered list with all items
 				}
 			}
 
 			await base.OnParametersSetAsync();
 		}
 
-		/*
-			This method checks if the items in both lists are equal.
-		*/
+		// This method checks if the items in both lists are equal.
 		private bool ItemsAreEqual(IEnumerable<T> list1, IEnumerable<T> list2)
 		{
 			var identifierProperty = typeof(T).GetProperty(IdentifierProperty);
@@ -88,9 +76,7 @@ namespace DropDownPackage.Components
 			return list1Identifiers.SequenceEqual(list2Identifiers);
 		}
 
-		/*
-			Helper method to get property value dynamically via reflection
-		*/
+		// Helper method to get property value dynamically via reflection
 		private object? GetPropertyValue(T item, string propertyName)
 		{
 			var propertyInfo = typeof(T).GetProperty(propertyName);
@@ -113,30 +99,86 @@ namespace DropDownPackage.Components
 			{
 				// Filter items based on DisplayProperty (search text matching any part of the display property)
 				FilteredItemList = ItemList.Where(item =>
-				GetPropertyValue(item, DisplayProperty)
-					.ToString()
-					.Contains(filterText, StringComparison.CurrentCultureIgnoreCase))
-					.ToList();
+				{
+					var displayValue = GetPropertyValue(item, DisplayProperty)?.ToString();
+					return displayValue != null && displayValue.Contains(filterText, StringComparison.CurrentCultureIgnoreCase);
+				}).ToList();
 			}
 
 			await InvokeAsync(StateHasChanged);
 		}
 
 		// Triggered when the selection changes
-		private async Task OnValueChanged(ChangeEventArgs e)
+		private async Task OnValueChanged(T item)
 		{
-			// Ensure we are properly getting the selected item
-			var selectedItemId = e.Value;
-
-			if (selectedItemId != null && ValueChanged.HasDelegate)
+			try
 			{
-				var selectedItem = ItemList.FirstOrDefault(item => GetPropertyValue(item, IdentifierProperty)?.ToString() == selectedItemId.ToString());
-				if (selectedItem != null)
+				if (item == null)
 				{
-					await ValueChanged.InvokeAsync(selectedItem);
+					throw new ArgumentNullException(nameof(item));
+				}
+
+				if (item != null)
+				{
+					SelectedItem = item;
+					isDropdownOpen = false;
+					FilteredItemList = ItemList; // Reset the filtered list to show all items
+
+					if (ValueChanged.HasDelegate)
+					{
+						await ValueChanged.InvokeAsync(SelectedItem);
+					}
+
+					// Re-render the component
+					await InvokeAsync(StateHasChanged);
 				}
 			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				throw new InvalidOperationException($"Error in OnValueChanged: {ex.Message}", ex);
+			}
 		}
+
+		// Toggle the dropdown visibility
+		private void ToggleDropdown()
+		{
+			isDropdownOpen = !isDropdownOpen;
+			StateHasChanged();
+		}
+
+		// Gets the CSS styling for the Height property
+		private string GetHeight()
+		{
+			if (string.IsNullOrWhiteSpace(Height))
+			{
+				return string.Empty;
+			}
+			else
+			{
+				return $"height: {(string.IsNullOrWhiteSpace(Height) ? string.Empty : Height)};";
+			}
+		}
+
+		// Gets the CSS styling for the Width property
+		private string GetWidth()
+		{
+			return $"width: {Width};";
+		}
+
+		// Gets the custom CSS styling if provided through the CustomStyle parameter
+		private string GetCustomStyle()
+		{
+			if (string.IsNullOrWhiteSpace(CustomStyle))
+			{
+				return string.Empty;
+			}
+			else
+			{
+				return $"{(string.IsNullOrWhiteSpace(CustomStyle) ? string.Empty : CustomStyle)};";
+			}
+		}
+
 
 		#endregion
 	}
