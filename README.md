@@ -1,4 +1,4 @@
-# MultiSelectPackage
+# DropDownPackage
 
 A lightweight, customizable DropDown component built with Blazor. Easily select options from a dropdown with support for search, custom templates, and more.
 
