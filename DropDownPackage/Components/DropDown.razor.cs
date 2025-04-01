@@ -33,6 +33,12 @@ namespace DropDownPackage.Components
 		[Parameter]
 		public string CustomStyle { get; set; } = string.Empty;
 
+		[Parameter]
+		public T? SelectedItem { get; set; }
+
+		[Parameter]
+		public string ComponentId { get; set; } = Guid.NewGuid().ToString("N");
+
 		#endregion
 
 		#region Properties
@@ -40,7 +46,7 @@ namespace DropDownPackage.Components
 		private List<T> ItemList = new List<T>();
 		private List<T> FilteredItemList = new List<T>();
 		private bool isDropdownOpen = false;
-		private T? SelectedItem { get; set; }
+		private T? SelectedValue { get; set; }
 
 		#endregion
 
@@ -55,6 +61,13 @@ namespace DropDownPackage.Components
 				{
 					ItemList = Items.ToList();      // Initialize ItemList with the provided items
 					FilteredItemList = ItemList;    // Initialize the filtered list with all items
+
+					// Check if SelectedItem is not null
+					if (SelectedItem != null)
+					{
+						// If SelectedItems is not equal to the current SelectedValue, update SelectedValue so that the UI reflects the changes
+						SelectedValue = SelectedItem;
+					}
 				}
 			}
 
@@ -120,13 +133,13 @@ namespace DropDownPackage.Components
 
 				if (item != null)
 				{
-					SelectedItem = item;
+					SelectedValue = item;
 					isDropdownOpen = false;
 					FilteredItemList = ItemList; // Reset the filtered list to show all items
 
 					if (ValueChanged.HasDelegate)
 					{
-						await ValueChanged.InvokeAsync(SelectedItem);
+						await ValueChanged.InvokeAsync(SelectedValue);
 					}
 
 					// Re-render the component
