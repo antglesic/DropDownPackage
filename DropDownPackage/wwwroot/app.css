@@ -1150,8 +1150,8 @@ p.modal-error {
 	}
 
 	.pagination li.disabled a {
-		pointer-events: default;
-		cursor: pointer;
+		pointer-events: none;
+		cursor: default;
 	}
 
 .pagination li.previous, .pagination li.next {
@@ -1491,11 +1491,7 @@ span.tool-lock-disabled {
 	color: rgba($text-color-light, .6) !important;
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-	color: rgba($text-color-light, .6) !important;
-}
-
-::-ms-input-placeholder { /* Microsoft Edge */
+:-ms-input-placeholder { /* Microsoft Edge */
 	color: rgba($text-color-light, .6) !important;
 }
 
